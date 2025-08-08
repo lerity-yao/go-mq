@@ -184,8 +184,7 @@ func (q *RabbitListener) processMessage(listenerConsumer ConsumerConf, message a
 	ctx := q.ctx
 	var traceSpan oteltrace.Span
 	carrier := msgBody.Carrier
-	carrierKeysLength := len(carrier.Keys())
-	if carrierKeysLength > 0 {
+	if carrier != nil && len(carrier.Keys()) > 0 {
 		wireContext := otel.GetTextMapPropagator().Extract(ctx, msgBody.Carrier)
 		tracer := otel.GetTracerProvider().Tracer(trace.TraceName)
 		spanCtx, span := tracer.Start(wireContext,
